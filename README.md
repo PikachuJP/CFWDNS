@@ -5,9 +5,11 @@ V1 : One Zone Managing
 
 V2 : Updated To Support Multi Zones
 
+V2.1 : Updated To Show A Records
+
 Note : IPs Must Be Json Array !
 
-This Guide For Version Two ( Recommended ! ) :
+This Guide For Version 2.1 ( Recommended ! ) :
 
 You Need To Replace : API_KEY_HERE / NAME_ONE / NAME_TWO / ZONE_ID_ONE / ZONE_ID_TWO / USER_NAME / PASS_WORD
 
