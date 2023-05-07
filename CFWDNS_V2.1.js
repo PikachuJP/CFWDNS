@@ -1,5 +1,5 @@
 const zones = [
-  { zoneId: 'ZONE_ID_ONE', zoneName: 'NAME_ONE ' },
+  { zoneId: 'ZONE_ID_ONE', zoneName: 'NAME_ONE' },
   { zoneId: 'ZONE_ID_TWO', zoneName: 'NAME_TWO' },
   // Add more zones as needed
 ];
@@ -31,7 +31,7 @@ const html = `
   <br>
   <form method="POST" onSubmit="deleteRecords(event)">
     <h2>Delete DNS Records</h2>
-    <label for="delete-name">Record Name (Full Name From Get A ):</label>
+    <label for="delete-name">Record Name ( Full Name From Get A ):</label>
     <input type="text" id="delete-name" name="delete-name"><br><br>
     <button type="submit">Delete Records</button>
   </form>
