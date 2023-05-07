@@ -31,7 +31,7 @@ const html = `
   <br>
   <form method="POST" onSubmit="deleteRecords(event)">
     <h2>Delete DNS Records</h2>
-    <label for="delete-name">Record Name ( Full Name From Get A ):</label>
+    <label for="delete-name">Record Name (Only Name Required):</label>
     <input type="text" id="delete-name" name="delete-name"><br><br>
     <button type="submit">Delete Records</button>
   </form>
@@ -60,12 +60,27 @@ const html = `
     }
 
     async function showARecords() {
-      const zoneId = document.getElementById("zone-select").value;
-      const response = await fetch(\`/get-a-records?zoneId=\${zoneId}\`, { method: "GET" });
-      const result = await response.json();
-      const aRecords = result.records.map(record => record.name + ' -> ' + record.content);
-      document.getElementById("a-records").textContent = aRecords.join(", ");
-    }
+  const zoneId = document.getElementById("zone-select").value;
+  const response = await fetch("/get-a-records?zoneId=" + zoneId, { method: "GET" });
+  const result = await response.json();
+  const aRecords = result.records.map(record => [record.name, record.content]);
+
+  const table = document.createElement("table");
+  const headers = table.insertRow(0);
+  headers.insertCell(0).outerHTML = "<th>Record Name</th>";
+  headers.insertCell(1).outerHTML = "<th>IP Address</th>";
+
+  for (let i = 0; i < aRecords.length; i++) {
+    const record = aRecords[i];
+    const row = table.insertRow(i + 1);
+    row.insertCell(0).textContent = record[0];
+    row.insertCell(1).textContent = record[1];
+  }
+
+  const aRecordsDiv = document.getElementById("a-records");
+  aRecordsDiv.innerHTML = "";
+  aRecordsDiv.appendChild(table);
+}
   </script>
 </body>
 </html>
@@ -163,36 +178,35 @@ async function addRecord(zoneId, name, ips, ttl) {
   }
 }
 
-async function deleteRecords(zoneId, name) {
-  const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records?type=A&name=${name}`, {
+async function deleteRecords(zoneId, partialName) {
+  const url = `https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records?type=A`;
+  const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer API_KEY_HERE`,
+      'Authorization': 'Bearer API_KEY_HERE',
     },
   });
 
-  const result = await response.json();
-  const records = result.result;
-  if (records.length === 0) {
-    // Record does not exist
-    return { message: `DNS records of '${name}' does not exist.` };
+  const data = await response.json();
+  const matchingRecords = data.result.filter(record => record.name.startsWith(partialName + '.') || record.name === partialName);
+
+  if (matchingRecords.length === 0) {
+    return { message: `No DNS records found for '${partialName}'` };
   }
 
-  // Record(s) exist, delete them
-  for (const record of records) {
-    const response2 = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${record.id}`, {
+  for (const record of matchingRecords) {
+    const deleteResponse = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${record.id}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer API_KEY_HERE`,
+        'Authorization': 'Bearer API_KEY_HERE',
       },
     });
-
-    await response2.json();
+    if (!deleteResponse.ok) {
+      return { message: `Failed to delete DNS record '${record.name}'` };
+    }
   }
 
-  return { message: `DNS records of '${name}' deleted.` };
+  return { message: `DNS records containing '${partialName}' deleted.` };
 }
 
 async function getRecords(zoneId, partialName) {
