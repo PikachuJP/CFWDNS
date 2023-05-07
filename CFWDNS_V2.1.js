@@ -202,11 +202,11 @@ async function deleteRecords(zoneId, partialName) {
       },
     });
     if (!deleteResponse.ok) {
-      return { message: `Failed to delete DNS record '${record.name}'` };
+      return { message: `Failed to delete DNS records with name '${record.name}'` };
     }
   }
 
-  return { message: `DNS records containing '${partialName}' deleted.` };
+  return { message: `DNS records with name '${partialName}' deleted.` };
 }
 
 async function getRecords(zoneId, partialName) {
