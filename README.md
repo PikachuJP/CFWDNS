@@ -3,13 +3,11 @@ Cloudflare Wroker Auto DNS Manager For A Records !
 
 V1 : One Zone Managing
 
-V2 : Updated To Support Multi Zones
-
-V2.1 : Updated To Show A Records
+V2 : Updated To Support Multi Zones, Show A Records Of Zone And Delete Function Now Only Requires The Record Name Only
 
 Note : IPs Must Be Json Array !
 
-This Guide For Version 2.1 ( Recommended ! ) :
+This Guide For Version 2 ( Recommended ! ) :
 
 You Need To Replace : API_KEY_HERE / NAME_ONE / NAME_TWO / ZONE_ID_ONE / ZONE_ID_TWO / USER_NAME / PASS_WORD
 
