@@ -44,4 +44,4 @@ ScreenShots :
 V2
 
 
-![image](https://user-images.githubusercontent.com/128409341/236447483-80c0f875-be43-4165-a91f-12fb50810fd1.png)
+![image](https://github.com/PikachuJP/CFWDNS/assets/128409341/857e1614-2d22-4df3-8032-532040fcd020)
